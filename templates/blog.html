@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - DirectoryExplorer{% endblock %}
+
+{% block content %}
+    <h1>Blog Posts</h1>
+    <div class="list-group">
+        {% for post in posts %}
+            <a href="{{ url_for('blog_detail', post_id=post.id) }}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ post.title }}</h5>
+                    <small>{{ post.date }}</small>
+                </div>
+                <p class="mb-1">{{ post.summary }}</p>
+                <small>By {{ post.author }}</small>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.name }} - DirectoryExplorer{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-3">
+                <img src="{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
+                <div class="card-body">
+                    <span class="badge bg-primary mb-2 rounded-pill">{{ item.category }}</span>
+                    <h1 class="card-title">{{ item.name }}</h1>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text"><small class="text-muted">Rating: ★ {{ item.rating }}</small></p>
+                    <p class="card-text"><small class="text-muted">Address: {{ item.address }}</small></p>
+                    {# Add more details as needed #}
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Back to Directory</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Directory Explorer{% endblock %}
+
+{% block content %}
+<div class="text-white py-5 mb-4" style="background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);">
+    <div class="container text-center">
+        <h1 class="display-4">Directory Explorer</h1>
+        <p class="lead">Discover amazing places and businesses in your area</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form action="{{ url_for('index') }}" method="get">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg rounded-pill" placeholder="Search by name or description..." aria-label="Search by name or description..." aria-describedby="button-addon2" name="search" value="{{ search_query if search_query }}">
+                        <button class="btn btn-dark rounded-pill ms-2" type="submit" id="button-addon2">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-6">
+            <h5>Filter Options</h5>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <button class="btn btn-outline-secondary btn-sm">Show Filters</button>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{{ url_for('index', search=search_query, category='All') }}" class="badge {% if category_filter == 'All' or category_filter is none %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">All</a>
+            <a href="{{ url_for('index', search=search_query, category='Cafe') }}" class="badge {% if category_filter == 'Cafe' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Cafe</a>
+            <a href="{{ url_for('index', search=search_query, category='Restaurant') }}" class="badge {% if category_filter == 'Restaurant' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Restaurant</a>
+            <a href="{{ url_for('index', search=search_query, category='Technology') }}" class="badge {% if category_filter == 'Technology' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Technology</a>
+            <a href="{{ url_for('index', search=search_query, category='Fitness') }}" class="badge {% if category_filter == 'Fitness' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Fitness</a>
+            <a href="{{ url_for('index', search=search_query, category='Bookstore') }}" class="badge {% if category_filter == 'Bookstore' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Bookstore</a>
+            <a href="{{ url_for('index', search=search_query, category='Hotel') }}" class="badge {% if category_filter == 'Hotel' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Hotel</a>
+            <a href="{{ url_for('index', search=search_query, category='Education') }}" class="badge {% if category_filter == 'Education' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Education</a>
+            <a href="{{ url_for('index', search=search_query, category='Entertainment') }}" class="badge {% if category_filter == 'Entertainment' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Entertainment</a>
+            <a href="{{ url_for('index', search=search_query, category='Health') }}" class="badge {% if category_filter == 'Health' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Health</a>
+            <a href="{{ url_for('index', search=search_query, category='Shopping') }}" class="badge {% if category_filter == 'Shopping' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Shopping</a>
+            <a href="{{ url_for('index', search=search_query, category='Services') }}" class="badge {% if category_filter == 'Services' %}bg-secondary{% else %}bg-light text-dark border{% endif %} me-1 px-3 py-2 rounded-pill text-decoration-none">Services</a>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <p>Showing {{ items|length }} of {{ total_items }} results</p>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        {% for item in items %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <a href="{{ url_for('item_detail', item_id=item.id) }}">
+                    <img src="{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
+                </a>
+                <div class="card-body">
+                    <span class="badge bg-primary mb-2 rounded-pill">{{ item.category }}</span>
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">★ {{ item.rating }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# Pagination #}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('index', search=search_query, category=category_filter, page=page - 1) }}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            {% for p in range(1, total_pages + 1) %}
+            <li class="page-item {% if page == p %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('index', search=search_query, category=category_filter, page=p) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+            <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('index', search=search_query, category=category_filter, page=page + 1) }}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}

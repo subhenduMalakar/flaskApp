@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - DirectoryExplorer{% endblock %}
+
+{% block content %}
+    <h1>{{ about_content.title }}</h1>
+    <div>
+        {{ about_content.body | safe }}
+    </div>
+{% endblock %}
